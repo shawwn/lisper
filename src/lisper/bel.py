@@ -245,11 +245,11 @@ def evcall(e, a, s, r, m):
 def evcall2(es, a, s, r, m):
     op, r = car(r), cdr(r)
     @fu
-    def evcall3(s, r, m):
+    def applyf_fut(s, r, m):
         args, r2 = snap(es, r)
         return applyf(op, rev(args), a, s, r2, m)
     return mev(append(map(lambda _: list(_, a), es),
-                      cons(evcall3, s)),
+                      cons(applyf_fut, s)),
                r,
                m)
 
