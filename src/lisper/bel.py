@@ -218,6 +218,23 @@ def quote_form(es, a, s, r, m):
     e = car(es)
     return mev(s, cons(e, r), m)
 
+@form("if")
+def if_form(es, a, s, r, m):
+    if no(es):
+        return mev(s, cons(nil, r), m)
+    args = list(car(es), a)
+    if cdr(es):
+        @fu
+        def if2_fut(s, r, m):
+            return if2(cdr(es), a, s, r, m)
+        return mev(cons(args, if2_fut, s), r, m)
+    else:
+        return mev(cons(args, s), r, m)
+
+def if2(es, a, s, r, m):
+    e = car(es) if car(r) else cons("if", cdr(es))
+    return mev(cons(list(e, a), s), cdr(r), m)
+
 def evcall(e, a, s, r, m):
     return mev(cons(list(car(e), a),
                     fu(lambda s, r, m: evcall2(cdr(e), a, s, r, m)),
